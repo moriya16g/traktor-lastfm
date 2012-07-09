@@ -29,12 +29,12 @@ class Server(threading.Thread):
         self.s.bind((self.host, self.port))
         self.s.listen(1)
         self.conn, self.addr = self.s.accept()
-
         
     def run(self):
         """
         thread runner
         """
+        self.running = True
         while 1:
             data = self.conn.recv(65535)
             if data.find('ice') != -1:
@@ -49,6 +49,12 @@ class Server(threading.Thread):
                 length = unpack('l', self.title.group(1))[0] - 6
                 self.title = (self.title.group(2))[0:length]
                 print "TITLE:" + self.title
+            if self.running == False:
+                break
+
+    def stop(self):
+        self.running = False
+        self.conn.close()
 
     def get_artist(self):
         """
@@ -61,7 +67,6 @@ class Server(threading.Thread):
         return title
         """
         return self.titile
-
 
 if __name__ == "__main__":
     server = Server(9999)
