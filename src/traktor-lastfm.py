@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import Tkinter
+import config
+import icecast
 
 """
 traktor-lastfm main module
@@ -61,8 +63,7 @@ class Frame(Tkinter.Frame):
         self.var_checkbutton_lastfm.set(True)
         self.checkbutton_lastfm = Tkinter.Checkbutton(self.frame_lastfm_checkbutton_frame,
                                                       variable=self.var_checkbutton_lastfm).pack()      
-        #self.checkbutton_lastfm.grid(row=3, column=2, padx=5, pady=5)
-        
+
 
     def set_label_status_not_running(self):
         """
@@ -76,7 +77,7 @@ class Frame(Tkinter.Frame):
         set 'running' to status label
         """
         self.label_status.configure(text='   running   ',
-                                    bg='LightSkyBlue', bd=0)
+                                    bg='LightSkyBlue', bd=2)
 
     def set_label_music_not_running(self):
         """
@@ -85,16 +86,24 @@ class Frame(Tkinter.Frame):
         self.label_status.configure(text=
                             '------------------- / ---------------------')
 
-    def set_label_music_running(self):
+    def set_label_music_running(self, music):
         """
         set 'running' to music label
         """
-        self.label_status.configure(text='   running   ')
+        self.label_status.configure(text=music)
 
-
+    def set_label_port(self, port):
+        """
+        set port label
+        """
+        self.label_port.configure(text=str(port))
 
 
 if __name__ == '__main__':
+    conf = config.Config("setting.ini")
+    server = icecast.Server(conf.get_port())
+    server.start()
     app = Frame()
     app.pack()
+    app.set_label_port(conf.get_port())
     app.mainloop()

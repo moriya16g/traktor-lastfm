@@ -27,13 +27,13 @@ class Server(threading.Thread):
         # start server
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.bind((self.host, self.port))
-        self.s.listen(1)
-        self.conn, self.addr = self.s.accept()
+        self.s.listen(5)
         
     def run(self):
         """
         thread runner
         """
+        self.conn, self.addr = self.s.accept()
         self.running = True
         while 1:
             data = self.conn.recv(65535)

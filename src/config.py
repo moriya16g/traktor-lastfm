@@ -50,7 +50,7 @@ class Config(object):
         ini.read(self.file)
 
         if not port.isdigit():
-            return 0
+            return 9999
 
         ini.set('server', 'port', port)
 
@@ -68,8 +68,8 @@ class Config(object):
 
         port = ini.get('server', 'port')
         if not port.isdigit():
-            self.set_port('0')
-            return 0
+            self.set_port('9999')
+            return 9999
 
         return int(port)
 
