@@ -14,16 +14,18 @@ class Server(threading.Thread):
     Icecast server
     """
 
-    def __init__(self, port):
+    def __init__(self, port, callback):
         """
         constructor
 
         port -- number of port
+        callback -- callback function
         """
         threading.Thread.__init__(self)
         self.setDaemon(True)
         self.host = ''
         self.port = port
+        self.callback = callback
         # start server
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.bind((self.host, self.port))
@@ -35,6 +37,8 @@ class Server(threading.Thread):
         """
         self.conn, self.addr = self.s.accept()
         self.running = True
+        self.artist = ''
+        self.title = ''
         while 1:
             data = self.conn.recv(65535)
             if data.find('ice') != -1:
@@ -43,12 +47,13 @@ class Server(threading.Thread):
                 self.artist = re.search(b'(....)ARTIST=(.*)', data)
                 length = unpack('l', self.artist.group(1))[0] - 7
                 self.artist = (self.artist.group(2))[0:length]
-                print "ARTIST:" + self.artist
+                #print "ARTIST:" + self.artist
             if re.search(b'(....)TITLE=(.*)', data):
                 self.title = re.search(b'(....)TITLE=(.*)', data)
                 length = unpack('l', self.title.group(1))[0] - 6
                 self.title = (self.title.group(2))[0:length]
-                print "TITLE:" + self.title
+                #print "TITLE:" + self.title
+                self.callback(self.artist, self.title)
             if self.running == False:
                 break
 

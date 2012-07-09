@@ -86,11 +86,13 @@ class Frame(Tkinter.Frame):
         self.label_status.configure(text=
                             '------------------- / ---------------------')
 
-    def set_label_music_running(self, music):
+    def set_label_music_running(self, artist, title):
         """
         set 'running' to music label
         """
-        self.label_status.configure(text=music)
+        self.artist = artist
+        self.title = title
+        self.label_status.configure(text=self.title + " / " + self.artist)
 
     def set_label_port(self, port):
         """
@@ -98,12 +100,11 @@ class Frame(Tkinter.Frame):
         """
         self.label_port.configure(text=str(port))
 
-
 if __name__ == '__main__':
     conf = config.Config("setting.ini")
-    server = icecast.Server(conf.get_port())
-    server.start()
     app = Frame()
     app.pack()
     app.set_label_port(conf.get_port())
+    server = icecast.Server(conf.get_port(), app.set_label_music_running)
+    server.start()
     app.mainloop()
