@@ -17,6 +17,7 @@ class Frame(Tkinter.Frame):
         """
         Tkinter.Frame.__init__(self, master)
         self.master.title('traktor-lastfm')
+        self.master.wm_iconbitmap('icon.ico')
 
         #status label
         self.label_status = Tkinter.Label(self)
