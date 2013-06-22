@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+import configparser
 import os
 
 """
@@ -28,7 +28,7 @@ class Config(object):
         """
         create the configuration file
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         
         ini.add_section('server')
         ini.set('server', 'port', '')
@@ -46,7 +46,7 @@ class Config(object):
         
         port -- number of port
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         if not port.isdigit():
@@ -63,7 +63,7 @@ class Config(object):
         """
         return port from the configparser file
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         port = ini.get('server', 'port')
@@ -79,7 +79,7 @@ class Config(object):
         
         username -- username
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         ini.set('lastfm', 'username', username)
@@ -92,7 +92,7 @@ class Config(object):
         """
         return username of last.fm from the configparser file
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         username = ini.get('lastfm', 'username')
@@ -105,7 +105,7 @@ class Config(object):
         
         username -- username
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         ini.set('lastfm', 'password', password)
@@ -118,7 +118,7 @@ class Config(object):
         """
         return password of last.fm from the configparser file
         """
-        ini = ConfigParser.SafeConfigParser()
+        ini = configparser.SafeConfigParser()
         ini.read(self.file)
 
         password = ini.get('lastfm', 'password')

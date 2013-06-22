@@ -41,18 +41,21 @@ class Server(threading.Thread):
         self.title = ''
         while 1:
             data = self.conn.recv(65535)
-            if data.find('ice') != -1:
-                self.conn.sendall("HTTP/1.0 200 OK\r\n\r\n")
-            if re.search(b'(....)ARTIST=(.*)', data):
-                self.artist = re.search(b'(....)ARTIST=(.*)', data)
+            #data = str(data, encoding='utf8')
+            if data.find(bytes('ice', 'utf8')) != -1:
+                self.conn.sendall(bytes("HTTP/1.0 200 OK\r\n\r\n", 'utf8'))
+            if re.search(bytes('(....)ARTIST=(.*)', 'utf8'), data):
+                self.artist = re.search(bytes('(....)ARTIST=(.*)', 'utf8'), data)
                 length = unpack('l', self.artist.group(1))[0] - 7
                 self.artist = (self.artist.group(2))[0:length]
                 #print "ARTIST:" + self.artist
-            if re.search(b'(....)TITLE=(.*)', data):
-                self.title = re.search(b'(....)TITLE=(.*)', data)
+            if re.search(bytes('(....)TITLE=(.*)', 'utf8'), data):
+                self.title = re.search(bytes('(....)TITLE=(.*)','utf8'), data)
                 length = unpack('l', self.title.group(1))[0] - 6
                 self.title = (self.title.group(2))[0:length]
                 #print "TITLE:" + self.title
+                self.artist = str(self.artist, 'utf8')
+                self.title = str(self.title, 'utf8')
                 self.callback(self.artist, self.title)
             if self.running == False:
                 break
